@@ -24,7 +24,6 @@ declare module "@remix-run/cloudflare" {
 
 export const initShopify = (context: AppLoadContext) => {
   console.log("CONTEXG ENV", context.env);
-  console.log("PROCESS XXXXXXXXXXXXXXXX", process.env);
   const shopify = shopifyApp({
     apiKey: context.env.SHOPIFY_API_KEY,
     apiSecretKey: context.env.SHOPIFY_API_SECRET || "",

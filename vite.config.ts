@@ -1,6 +1,7 @@
 import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig, type UserConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import fs from "node:fs";
 
 // Related: https://github.com/remix-run/remix/issues/2835#issuecomment-1144102176
 // Replace the HOST env var with SHOPIFY_APP_URL so that it doesn't break the remix server. The CLI will eventually
@@ -12,6 +13,14 @@ if (
 ) {
   process.env.SHOPIFY_APP_URL = process.env.HOST;
   delete process.env.HOST;
+}
+
+// Binds env vars for local development with Cloudflare pages
+if (process.env.NODE_ENV === "development") {
+  fs.writeFileSync(
+    ".dev.vars",
+    `SHOPIFY_APP_URL=${process.env.SHOPIFY_APP_URL}\nSHOPIFY_API_KEY=${process.env.SHOPIFY_API_KEY}\nSHOPIFY_API_SECRET=${process.env.SHOPIFY_API_SECRET}\nSCOPES=${process.env.SCOPES}\n`,
+  );
 }
 
 const host = new URL(process.env.SHOPIFY_APP_URL || "http://localhost")
